@@ -1,0 +1,27 @@
+{
+  "name": "@tfaster/simple-web-l10n",
+  "version": "1.0.0",
+  "description": "A simple 'Vanilla JS' solution to translate websites written in typescript",
+  "main": "dist/simple-web-l10n.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tFaster/simple-web-l10n.git"
+  },
+  "keywords": [
+    "l10n",
+    "localization",
+    "translation"
+  ],
+  "author": "Timo Schneller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tFaster/simple-web-l10n/issues"
+  },
+  "homepage": "https://github.com/tFaster/simple-web-l10n#readme",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}

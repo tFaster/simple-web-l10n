@@ -12,3 +12,8 @@ A very lightweight L10N solution for static websites
 ```bash
 $ npm i @tfaster/simple-web-l10n
 ```
+
+##Browser support
+All modern browsers are supported
+
+IE11 requires a [Polyfill](https://developer.mozilla.org/en-US/docs/Web/API/NodeList/forEach#Polyfill) for NodeList.prototype.forEach()

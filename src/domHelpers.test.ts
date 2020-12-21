@@ -42,6 +42,12 @@ describe('domHelpers', () => {
       expect(l10nElementMap.size).toBe(1);
     });
 
+    it('should collect one element, even if key is used twice', () => {
+      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="hello"></span></div>`;
+      const l10nElementMap = collectL10nElements(document.body);
+      expect(l10nElementMap.size).toBe(1);
+    });
+
     it('should collect two elements', () => {
       document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="world"></span></div>`;
       const l10nElementMap = collectL10nElements(document.body);
@@ -62,7 +68,7 @@ describe('domHelpers', () => {
     deCatalog.set('world', 'Welt');
 
     it('should set text in elements', () => {
-      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="world"></span></div>`;
+      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="world"></span><span data-l10n="world"></span></div>`;
       const spanElements: HTMLCollectionOf<Element> = document.body.getElementsByTagName('SPAN');
       const l10nElementMap = collectL10nElements(document.body);
       expect(l10nElementMap.size).toBe(2);

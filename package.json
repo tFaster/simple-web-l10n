@@ -1,6 +1,6 @@
 {
   "name": "@tfaster/simple-web-l10n",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple 'Vanilla JS' solution to translate websites written in typescript",
   "main": "dist/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "@tfaster/simple-web-l10n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple 'Vanilla JS' solution to translate websites written in typescript",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,12 @@
     "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015 --declaration",
     "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm --declaration",
     "build:iife": "rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "copy-packagejson": "copy .\\package.json .\\dist",
+    "copy-license": "copy .\\LICENSE .\\dist",
+    "copy-files": "npm run copy-license && npm run copy-packagejson",
+    "npm-pack": "cd dist && npm pack",
+    "package": "npm run build && npm run copy-files && npm run npm-pack"
   },
   "repository": {
     "type": "git",

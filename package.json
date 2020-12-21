@@ -7,7 +7,7 @@
     "build": "npm run build:es2015 && npm run build:esm && npm run build:iife",
     "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015 --declaration",
     "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm --declaration",
-    "build:iife": "rollup dist/esm/index.js --format iife --name 'SimpleWebL10n' --sourcemap --file dist/iife/simpleWebL10n.js",
+    "build:iife": "rollup -c",
     "test": "jest"
   },
   "repository": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "jest": "^26.6.3",
     "rollup": "^2.35.1",
+    "rollup-plugin-license": "^2.2.0",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"
   }

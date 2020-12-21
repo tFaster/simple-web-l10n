@@ -2,8 +2,9 @@
   "name": "@tfaster/simple-web-l10n",
   "version": "1.0.0",
   "description": "A simple 'Vanilla JS' solution to translate websites written in typescript",
-  "main": "dist/simple-web-l10n.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc --declaration",
     "test": "jest"
   },
   "repository": {

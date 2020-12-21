@@ -5,6 +5,8 @@
 
 A very lightweight L10N solution for static websites
 
+**Check out the [Demo](https://tfaster.github.io/simple-web-l10n/index.html)**
+
 ## Installation
 
 ```bash

@@ -21,24 +21,33 @@ export function collectL10nElements(root: HTMLElement): L10nElementMap {
   return l10nElementMap;
 }
 
-export function exchangeL10nValues(l10nElements: L10nElementMap, l10nCatalogs: L10nCatalogMap, language: string): boolean {
+export function exchangeL10nValues(l10nElements: L10nElementMap, l10nCatalogs: L10nCatalogMap, language: string, fallbackLanguage?: string): boolean {
   if (l10nCatalogs.has(language)) {
     // @ts-ignore
     const l10nCatalog: L10nValueMap = l10nCatalogs.get(language);
-    l10nCatalog.forEach((translatedText: string, l10nKey: string) => {
-      const elements: HTMLElement[] | undefined = l10nElements.get(l10nKey);
-      if (elements) {
-        elements.forEach((element: HTMLElement) => {
-          element.innerHTML = translatedText;
-        });
-      }
-    });
+    l10nElements.forEach((elements: HTMLElement[], l10nKey) => {
+      elements.forEach((element: HTMLElement) => {
+        const l10nValue:string | undefined = l10nCatalog.get(l10nKey);
+        if (typeof l10nValue !== 'undefined') {
+          element.innerHTML = l10nValue
+        } else if (fallbackLanguage) {
+          element.innerHTML = getL10nValue(l10nCatalogs, l10nKey, fallbackLanguage);
+        }
+      });
+    })
     return true;
   } else {
     console.warn(`Language ${language} is not available`);
+    if (fallbackLanguage) {
+      return exchangeL10nValues(l10nElements, l10nCatalogs, fallbackLanguage);
+    }
     return false;
   }
+}
 
+export function getL10nValue(l10nCatalogs: L10nCatalogMap, l10nKey: string, language: string): string {
+  const l10nCatalog: L10nValueMap | undefined = l10nCatalogs.get(language);
+  return l10nCatalog?.get(l10nKey) || '';
 }
 
 export function getL10nElements(root: HTMLElement): NodeListOf<HTMLElement> {

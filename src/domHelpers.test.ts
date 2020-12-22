@@ -7,17 +7,31 @@ describe('domHelpers', () => {
   describe('getL10nElements', () => {
 
     it('should find one element', () => {
-      document.body.innerHTML = `<div><span data-l10n>Hello</span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n>Hello</span>
+        </div>
+      `;
       expect(getL10nElements(document.body).length).toBe(1);
     });
 
     it('should find 2 elements', () => {
-      document.body.innerHTML = `<div><span data-l10n>Hello</span><span data-l10n>World</span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n>Hello</span>
+          <span data-l10n>World</span>
+        </div>
+      `;
       expect(getL10nElements(document.body).length).toBe(2);
     });
 
     it('should not find elements', () => {
-      document.body.innerHTML = `<div><span>Hello</span><span>World</span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span>Hello</span>
+          <span>World</span>
+        </div>
+      `;
       expect(getL10nElements(document.body).length).toBe(0);
     });
 
@@ -26,9 +40,13 @@ describe('domHelpers', () => {
   describe('setElementText', () => {
 
     it('should set text on element', () => {
-      document.body.innerHTML = `<div><span data-l10n>Hello</span></div>`;
-      const elem = document.body.getElementsByTagName('SPAN').item(0) as HTMLElement;
-      setElementText(elem, 'World');
+      const elements: HTMLCollectionOf<Element> = setAndGetTestSpanElements(`
+        <div>
+          <span data-l10n>Hello</span>
+        </div>
+      `);
+      const elem: HTMLElement = elements[0] as HTMLElement;
+      setElementText(elem as HTMLElement, 'World');
       expect(elem.innerText).toBe('World');
     });
 
@@ -37,19 +55,33 @@ describe('domHelpers', () => {
   describe('collectL10nElements', () => {
 
     it('should collect one element', () => {
-      document.body.innerHTML = `<div><span data-l10n="hello"></span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n="hello"></span>
+        </div>
+      `;
       const l10nElementMap = collectL10nElements(document.body);
       expect(l10nElementMap.size).toBe(1);
     });
 
     it('should collect one element, even if key is used twice', () => {
-      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="hello"></span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n="hello"></span>
+          <span data-l10n="hello"></span>
+        </div>
+      `;
       const l10nElementMap = collectL10nElements(document.body);
       expect(l10nElementMap.size).toBe(1);
     });
 
     it('should collect two elements', () => {
-      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="world"></span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n="hello"></span>
+          <span data-l10n="world"></span>
+        </div>
+      `;
       const l10nElementMap = collectL10nElements(document.body);
       expect(l10nElementMap.size).toBe(2);
     });
@@ -64,12 +96,18 @@ describe('domHelpers', () => {
     l10nCatalogs.set('de', deCatalog);
     enCatalog.set('hello', 'Hello');
     enCatalog.set('world', 'World');
+    enCatalog.set('onlyEnglish', 'Only English');
     deCatalog.set('hello', 'Hallo');
     deCatalog.set('world', 'Welt');
 
     it('should set text in elements', () => {
-      document.body.innerHTML = `<div><span data-l10n="hello"></span><span data-l10n="world"></span><span data-l10n="world"></span></div>`;
-      const spanElements: HTMLCollectionOf<Element> = document.body.getElementsByTagName('SPAN');
+      const spanElements: HTMLCollectionOf<Element> = setAndGetTestSpanElements(`
+        <div>
+          <span data-l10n="hello"></span>
+          <span data-l10n="world"></span>
+          <span data-l10n="world"></span>
+        </div>
+      `);
       const l10nElementMap = collectL10nElements(document.body);
       expect(l10nElementMap.size).toBe(2);
       expect(spanElements.item(0)?.innerHTML).toBe('');
@@ -91,8 +129,41 @@ describe('domHelpers', () => {
       expect(spanElements.item(1)?.innerHTML).toBe('Welt');
     });
 
+    it('should set fallback text in elements if key not available in language', () => {
+      const spanElements: HTMLCollectionOf<Element> = setAndGetTestSpanElements(`
+        <div>
+          <span data-l10n="onlyEnglish"></span>
+        </div>
+      `);
+      const l10nElementMap = collectL10nElements(document.body);
+      expect(l10nElementMap.size).toBe(1);
+      expect(spanElements.item(0)?.innerHTML).toBe('');
+
+      const resultDe: boolean = exchangeL10nValues(l10nElementMap, l10nCatalogs, 'de', 'en');
+      expect(resultDe).toBeTruthy();
+      expect(spanElements.item(0)?.innerHTML).toBe('Only English');
+    });
+
+    it('should set fallback text in elements if language not available', () => {
+      const spanElements: HTMLCollectionOf<Element> = setAndGetTestSpanElements(`
+        <div>
+          <span data-l10n="hello"></span>
+          <span data-l10n="world"></span>
+        </div>
+      `);
+      const l10nElementMap = collectL10nElements(document.body);
+      const resultDe: boolean = exchangeL10nValues(l10nElementMap, l10nCatalogs, 'XYZ', 'de');
+      expect(resultDe).toBeTruthy();
+      expect(spanElements.item(0)?.innerHTML).toBe('Hallo');
+      expect(spanElements.item(1)?.innerHTML).toBe('Welt');
+    });
+
     it('should throw error when attribute value not defined', () => {
-      document.body.innerHTML = `<div><span data-l10n></span></div>`;
+      document.body.innerHTML = `
+        <div>
+          <span data-l10n></span>
+        </div>
+      `;
       expect(() => {
         collectL10nElements(document.body);
       }).toThrowError();
@@ -101,3 +172,8 @@ describe('domHelpers', () => {
   });
 
 });
+
+function setAndGetTestSpanElements(htmlWithSpanElements: string): HTMLCollectionOf<Element> {
+  document.body.innerHTML = htmlWithSpanElements;
+  return document.body.getElementsByTagName('SPAN');
+}

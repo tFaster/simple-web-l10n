@@ -7,9 +7,9 @@ export function collectL10nElements(root: HTMLElement): L10nElementMap {
     const l10nKey: string | null = getL10nElementKey(element);
     if (l10nKey) {
       let elementsList: HTMLElement[];
-      if (l10nElementMap.has(l10nKey)) {
-        // @ts-ignore
-        elementsList = [...l10nElementMap.get(l10nKey), element]
+      const alreadyFoundElements: HTMLElement[] | undefined = l10nElementMap.get(l10nKey);
+      if (alreadyFoundElements) {
+        elementsList = [...alreadyFoundElements, element]
       } else {
         elementsList = [element];
       }
@@ -22,9 +22,8 @@ export function collectL10nElements(root: HTMLElement): L10nElementMap {
 }
 
 export function exchangeL10nValues(l10nElements: L10nElementMap, l10nCatalogs: L10nCatalogMap, language: string, fallbackLanguage?: string): boolean {
-  if (l10nCatalogs.has(language)) {
-    // @ts-ignore
-    const l10nCatalog: L10nValueMap = l10nCatalogs.get(language);
+  const l10nCatalog: L10nValueMap | undefined = l10nCatalogs.get(language)
+  if (l10nCatalog) {
     l10nElements.forEach((elements: HTMLElement[], l10nKey) => {
       elements.forEach((element: HTMLElement) => {
         const l10nValue:string | undefined = l10nCatalog.get(l10nKey);

@@ -1,4 +1,4 @@
-import { L10nCatalogMap, L10nCatalogsJson } from './types';
+import { L10nCatalogMap, L10nCatalogsJson, L10nValueMap } from './types';
 import { parseCatalogs } from './catalogParser';
 
 describe('catalogParser', () => {
@@ -6,12 +6,14 @@ describe('catalogParser', () => {
   describe('parseCatalogs', () => {
 
     it('should throw error when catalogs are not defined or null', () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       let l10nData: L10nCatalogsJson = undefined;
       expect(() => {
         parseCatalogs(l10nData);
       }).toThrowError();
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       l10nData = null;
       expect(() => {
@@ -42,21 +44,19 @@ describe('catalogParser', () => {
       expect(catalogMap.has('en')).toBeTruthy();
       expect(catalogMap.has('de')).toBeTruthy();
 
-      // @ts-ignore
-      const enCatalog: L10nValueMap = catalogMap.get('en');
-      expect(enCatalog.size).toBe(2);
-      expect(enCatalog.has('hello')).toBeTruthy();
-      expect(enCatalog.get('hello')).toBe('Hello');
-      expect(enCatalog.has('world')).toBeTruthy();
-      expect(enCatalog.get('world')).toBe('World');
+      const enCatalog: L10nValueMap | undefined = catalogMap.get('en');
+      expect(enCatalog?.size).toBe(2);
+      expect(enCatalog?.has('hello')).toBeTruthy();
+      expect(enCatalog?.get('hello')).toBe('Hello');
+      expect(enCatalog?.has('world')).toBeTruthy();
+      expect(enCatalog?.get('world')).toBe('World');
 
-      // @ts-ignore
-      const deCatalog: L10nValueMap = catalogMap.get('de');
-      expect(deCatalog.size).toBe(2);
-      expect(deCatalog.has('hello')).toBeTruthy();
-      expect(deCatalog.get('hello')).toBe('Hallo');
-      expect(deCatalog.has('world')).toBeTruthy();
-      expect(deCatalog.get('world')).toBe('Welt');
+      const deCatalog: L10nValueMap | undefined = catalogMap.get('de');
+      expect(deCatalog?.size).toBe(2);
+      expect(deCatalog?.has('hello')).toBeTruthy();
+      expect(deCatalog?.get('hello')).toBe('Hallo');
+      expect(deCatalog?.has('world')).toBeTruthy();
+      expect(deCatalog?.get('world')).toBe('Welt');
     });
 
   });

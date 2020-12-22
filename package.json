@@ -8,6 +8,7 @@
     "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015 --declaration",
     "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm --declaration",
     "build:iife": "rollup -c",
+    "lint": "eslint src/**",
     "test": "jest",
     "copy-packagejson": "copy .\\package.json .\\dist",
     "copy-license": "copy .\\LICENSE .\\dist",
@@ -31,7 +32,10 @@
   },
   "homepage": "https://github.com/tFaster/simple-web-l10n#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
     "codecov": "^3.8.1",
+    "eslint": "^7.16.0",
     "jest": "^26.6.3",
     "rollup": "^2.35.1",
     "rollup-plugin-license": "^2.2.0",

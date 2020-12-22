@@ -5,8 +5,9 @@ dist: trusty
 sudo: required
 branches:
   only:
-    - master
+    - main
 script:
+  - npm run lint
   - npm test
 after_success:
   - codecov

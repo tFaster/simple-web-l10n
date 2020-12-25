@@ -7,11 +7,11 @@ export default {
     file: './dist/simpleWebL10n.js',
     format: 'iife',
     name: 'SimpleWebL10n',
-    sourcemap: true
+    sourcemap: false
   },
   plugins: [
     license({
-        sourcemap: true,
+        sourcemap: false,
         banner: {
           content: {
             file: path.join(__dirname, 'LICENSE')
